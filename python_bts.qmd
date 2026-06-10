@@ -1,0 +1,182 @@
+# Python behind-the-scenes: what data scientists should know
+
+The goal of this session is touch on the important programming concepts that often get missed in research-oriented tutorials (e.g. the software carpentries).
+
+Part of the problem is that it takes a lot less Python to *use* the popular modules (e.g. `pandas`, `numpy`, `matplotlib`) than to *develop* them. This is *the whole point*: the modules exist so that you don't need to be a developer.
+
+However, when it comes to using them, the more you know about what's going on behind-the-scenes, the more you'll understand *why things break* and *why things work*. This is a skill you learn over time, but one that we'll hopefully build up a bit today.
+
+Important concepts for researchers include
+
+* Classes/Object-Oriented-Programming (OOP)/Custom Variables: What is a `DataFrame`? What is a `Figure` or `Axes` object? What's the difference between a function and a method?
+* Vectorisation -> why pandas dataframes are more efficient than lists (spoiler: it's actually because of `numpy`)
+* Module design. Why do some modules use submodules?
+
+## What is Python?
+
+::: {.callout-note}
+# Group question
+
+What is Python?
+:::
+
+The answer is not as obvious as you might think. There are three things you might call Python:
+
+* The language
+* The program
+* The interpreter / IDE
+
+It's best seen by example. Let's run a simple program,
+
+```python
+{{< include simple_program.py >}}
+```
+
+What actually *happens* when you run it?
+
+1. You (or your IDE) calls the program `python` with the input file `simple_program.py`.
+
+:::{ .panel-tabset}
+
+# Windows
+
+```bash
+python simple_program.py
+```
+
+# MacOS / Linux
+
+```bash
+python3 simple_program.py
+```
+
+:::
+
+2. The program `python` *interprets* your 'Python' code for the computer, converting it into binary commands (1000101010...). It then *interprets* the binary output as something meaningful. This is why `python` is called the **interpreter**.
+
+So far so good. But how does the interpreter know what to do? Is the interpreter written in Python too?
+
+***No.***
+
+For most people, their interpreter is written in [C](https://en.wikipedia.org/wiki/C_(programming_language)) and referred to as the [CPython](https://en.wikipedia.org/wiki/CPython) implementation. C is a *compiled* language, rather than an interpreted one. Before you run any C program, you must compile it into binary code *as a separate step*. This means it's not dynamic but is suitable for programs.
+
+All this is to say that Python can mean a few things. Here, I'll stick to "Python" for the language and `python` for the program.
+
+::: {.callout-note}
+# Group activity
+
+Find your Python interpreter / executable.
+
+* On Windows, this is `python3.exe` 
+* On Mac / Linux, this is `python`
+
+Some places to look
+
+* Miniconda installs it in a folder called `miniforge3`.
+    * On Windows, try `C:\Users\your_username\AppData\Local\miniforge3`. You'll need to **unhide hidden folders**.
+    * On Mac / Linux
+* Standalone Python installs it in `.../Python/bin` 
+
+If you used Miniconda, go to the `envs` folder in `miniforge3`. You should find *another* interpreter! It's common to have many interpreters installed. Environment management can help mitigate side effects.
+
+:::
+
+So, **what is Python**?
+
+The Wikipedia answer is
+
+> Python is a high-level, general-purpose programming language that emphasizes code readability, simplicity, and ease-of-writing with the use of significant indentation, "plain English" naming, an extensive ("batteries-included") standard library, and garbage collection. Python supports multiple programming paradigms but with an emphasis on object-oriented programming and dynamic typing. 
+> Source: [Wikipedia](https://en.wikipedia.org/wiki/Python_(programming_language))
+
+Let's unpack this.
+
+| Characteristic | Description | 
+| --- | --- | 
+| **High-level** | Relies on another language (e.g. C) to convert to binary. | 
+| **General-purpose** | Used for software, research, data, machine learning, gaming, etc. | 
+| **Code readability** etc. | Lots of whitespace, simple syntax, code reads what it does | 
+| **Standard library** | There's a lot of useful built-in libraries | 
+| **Garbage collection** | Automatic memory management | 
+| **Object-oriented programming** | Custom variables/objects with built-in values and functions; **classes**. We'll talk more about this... |
+| **Dynamic typing** | You don't have to specify or stick to variable types (`int`, `str` etc.) |
+
+The most important one for us is **object-oriented programming**. It's an ...
+
+## Unpacking a simple example
+
+In our Python workshops we've been working with pandas DataFrames to manage data. We typically do something like
+
+```{python}
+import pandas as pd
+
+df = pd.read_csv("data/gapminder.csv") 
+
+df.head() 
+```
+
+We're going to study this example closely.
+
+### `import pandas as pd`
+
+In the first line, we import the module. Behind-the-scenes, Python searches certain (somewhat mysterious) locations on your computer for a folder called `pandas`.
+
+::: {.callout-note}
+# Group activity
+
+Find the pandas module and open the `__init__.py` file.
+
+1. Go to the location of your Python installation
+    * If you're using an environment, go there
+2. Find a folder called `pkgs` or `lib`
+3. Dig a little for `pandas` (or something similar)
+4. Keep digging until you find `__init__.py`
+5. Open it
+
+:::
+
+
+The `__init__.py` file gets run when you `import` the module. It's usually full of other `import` statements to access the rest of the module and function/class definitions. We'll come back to this.
+
+### `df = pd.read_csv("data/gapminder.csv")`
+
+This is the simplest line.
+
+* `df = ` assigns the output of the right hand side to the variable `df`.
+* `pd.read_csv(...)` is a function *inside* the `pandas` module. The `.` means "look inside"
+
+`pd.read_csv()` is a complicated function, but we can see its definition(s) explicitly---they're in the module. Go to `pandas/io/parsers/readers.py` and search for `def read_csv()`. That's the code that runs.
+
+
+### `df.head()`
+
+The *last* line, `df.head()` prints the first five rows in the dataframe `df`. There are three distinct elements:
+
+* `df` -- the dataframe
+* `.` -- the dot operator
+* `head()` -- the function
+
+:::{ .callout-note}
+# Group question
+
+What's the difference between
+
+```python
+head(df)
+pd.head(df)
+df.head()
+```
+:::
+
+The main difference is where `head` lives. 
+
+* `head(df)` assumes that `head` lives in the global namespace. This happens when
+    * It's a built-in function
+    * You define it yourself
+    * You import it explicitly: `from some_module import head` (or `from some_module import headache as head`)
+* `pd.head(df)` assumes that `head` lives in the `pandas` module, like `read_csv`.
+* `df.head()` assumes that `head lives *inside the variable* `df`.
+
+How can a function live *inside* a variable? Object-oriented programming.
+
+## What is a dataframe?
+
