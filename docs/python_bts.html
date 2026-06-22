@@ -58,18 +58,50 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="python_bts_files/libs/clipboard/clipboard.min.js"></script>
-<script src="python_bts_files/libs/quarto-html/quarto.js" type="module"></script>
-<script src="python_bts_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="python_bts_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="python_bts_files/libs/quarto-html/popper.min.js"></script>
-<script src="python_bts_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="python_bts_files/libs/quarto-html/anchor.min.js"></script>
-<link href="python_bts_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="python_bts_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="python_bts_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="python_bts_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="python_bts_files/libs/bootstrap/bootstrap-11d4f8990290ac9a721d15dc9257e5db.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-684316ac2ec3dc9c75a339f98dadaf30.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
 <script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
@@ -79,8 +111,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <body class="fullcontent quarto-light">
 
-<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -133,7 +170,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>The interpreter / IDE</li>
 </ul>
 <p>It’s best seen by example. Let’s run a simple program,</p>
-<div id="4f95a346" class="cell" data-execution_count="1">
+<div id="6c87a3d7" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This is a simple program."</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>one_plus_one <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span></span>
@@ -220,13 +257,13 @@ The most important one for us is **object-oriented programming**. It's an ... --
 <section id="unpacking-a-simple-example" class="level2">
 <h2 class="anchored" data-anchor-id="unpacking-a-simple-example">Unpacking a simple example</h2>
 <p>In our Python workshops we’ve been working with pandas DataFrames to manage data. We typically do something like</p>
-<div id="37900bea" class="cell" data-execution_count="2">
+<div id="bcbd1c52" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/gapminder_all.csv"</span>) </span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df.head() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -517,7 +554,7 @@ The most important one for us is **object-oriented programming**. It's an ... --
 <li><code>self</code> refers to ‘the current instance’ - whatever you name it.</li>
 <li>In the definitions, functions must take in <code>self</code> as the first argument. When used, <code>self</code> is left out.</li>
 </ul>
-<div id="8b864143" class="cell" data-execution_count="3">
+<div id="8520fdd2" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Button:</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    ysize <span class="op">=</span> <span class="dv">3</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -544,30 +581,30 @@ The most important one for us is **object-oriented programming**. It's an ... --
 <span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Everything defined within the class lives inside the instances. To make it,</p>
-<div id="5463f39b" class="cell" data-execution_count="4">
+<div id="73b72fef" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_button <span class="op">=</span> Button(<span class="dv">0</span>, <span class="dv">0</span>, <span class="st">"STOP"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We can view the variables <em>inside</em> <code>my_button</code>:</p>
-<div id="7b449747" class="cell" data-execution_count="5">
+<div id="4a02dffc" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_button.xsize</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>8</code></pre>
 </div>
 </div>
-<div id="29c0d566" class="cell" data-execution_count="6">
+<div id="2aec0aa7" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_button.ysize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>3</code></pre>
 </div>
 </div>
-<div id="4c24d985" class="cell" data-execution_count="7">
+<div id="3a48d25e" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_button.label_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>STOP</code></pre>
 </div>
 </div>
 <p>We can run the functions</p>
-<div id="e6edea12" class="cell" data-execution_count="8">
+<div id="b7511e1f" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_button.draw()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>--------
@@ -575,7 +612,7 @@ The most important one for us is **object-oriented programming**. It's an ... --
 --------</code></pre>
 </div>
 </div>
-<div id="f6515d80" class="cell" data-execution_count="9">
+<div id="5a563450" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_button.press()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>beep</code></pre>
@@ -599,7 +636,7 @@ The most important one for us is **object-oriented programming**. It's an ... --
 </div>
 </div>
 <p>We can have multiple buttons</p>
-<div id="40297a9e" class="cell" data-execution_count="10">
+<div id="dc8c5828" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>blue_button <span class="op">=</span> Button(<span class="dv">4</span>, <span class="dv">4</span>, <span class="st">"BLUE"</span>)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>red_button <span class="op">=</span> Button(<span class="op">-</span><span class="dv">4</span>, <span class="op">-</span><span class="dv">4</span>, <span class="st">"RED"</span>)</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -615,9 +652,9 @@ The most important one for us is **object-oriented programming**. It's an ... --
 </div>
 </div>
 <p>Finally, Python recognises that this is a new variable type:</p>
-<div id="288ba106" class="cell" data-execution_count="11">
+<div id="1cfe7e0a" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(blue_button)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>__main__.Button</code></pre>
 </div>
 </div>
@@ -645,12 +682,12 @@ The most important one for us is **object-oriented programming**. It's an ... --
 <h3 class="anchored" data-anchor-id="object-oriented-programming">Object-oriented programming</h3>
 <p>Classes can change the way you program by making changes <strong>in place</strong>. This is, practically, what object-oriented programming often looks like. Instead of running <em>external</em> functions to make changes to your variables, you run <em>internal</em> ones.</p>
 <p>Let’s look at an example using built-in Python code. We’ll start by making a list:</p>
-<div id="4e4b26bf" class="cell" data-execution_count="12">
+<div id="8e32c92f" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fruits <span class="op">=</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Remember, <code>fruits</code> is an instance of the <code>list</code> class. (<code>list</code> should really be <code>List</code>, but for historical reasons, it’s not).</p>
 <p>Many list methods are in-place, meaning they <em>don’t</em> return their object, but <em>do</em> modify it behind-the-scenes.</p>
-<div id="863bdd08" class="cell" data-execution_count="13">
+<div id="e21f7db3" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>append_output <span class="op">=</span> fruits.append(<span class="st">"durian"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)</span>
@@ -661,7 +698,7 @@ None</code></pre>
 </div>
 </div>
 <p>This means that you could have lots of lines of code <em>without</em> an assignment operator <code>=</code> that <em>do</em> modify variables:</p>
-<div id="1bc692a0" class="cell" data-execution_count="14">
+<div id="dcf347ae" class="cell" data-execution_count="14">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fruits.append(<span class="st">"banana"</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fruits.remove(<span class="st">"cherry"</span>)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>fruits.reverse()</span>
@@ -764,7 +801,7 @@ None</code></pre>
 <section id="traceback" class="level3">
 <h3 class="anchored" data-anchor-id="traceback">Traceback</h3>
 <p>Having an understanding of this file structure makes handling errors easier. Let’s create a complicated error. This will also show us how <code>pandas</code> actually works.</p>
-<div id="f18d65ae" class="cell" data-execution_count="15">
+<div id="336a3962" class="cell" data-execution_count="15">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame()</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Utterly meaningless code (apply attempts to apply a function across rows/cols)</span></span>
@@ -773,7 +810,7 @@ None</code></pre>
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
 <span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
-Cell <span class="ansi-green-fg">In[39], line 4</span>
+Cell <span class="ansi-green-fg">In[15], line 4</span>
 <span class="ansi-green-fg ansi-bold">      1</span> df <span style="color:rgb(98,98,98)">=</span> pd<span style="color:rgb(98,98,98)">.</span>DataFrame()
 <span class="ansi-green-fg ansi-bold">      3</span> <span style="font-style:italic;color:rgb(95,135,135)"># Utterly meaningless code (apply attempts to apply a function across rows/cols)</span>
 <span class="ansi-green-fg">----&gt; 4</span> <span class="ansi-yellow-bg">df</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">apply</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">pd</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">DataFrame</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
@@ -918,16 +955,16 @@ File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/p
 <section id="iteration" class="level3">
 <h3 class="anchored" data-anchor-id="iteration">Iteration</h3>
 <p>Given that, at the end of the day, <code>pandas</code> DataFrames are just made out of built-in Python objects (e.g.&nbsp;lists) anyway, is there any real advantage to using a DataFrame? Why not just a nested list, or dictionary:</p>
-<div id="b5b94beb" class="cell" data-execution_count="16">
+<div id="d79357d2" class="cell" data-execution_count="16">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">"col1"</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>], <span class="st">"col2"</span>: [<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>]}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>One of the advantages is efficiency: <code>pandas</code> has been designed to be efficient.</p>
 <p>A common task is doing the “same thing” to every row/column. Returning to the gapminder dataset, let’s isolate the “country” column (Series):</p>
-<div id="3e2cf112" class="cell" data-execution_count="17">
+<div id="21f7d45a" class="cell" data-execution_count="17">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/gapminder_all.csv"</span>)</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> df[<span class="st">"country"</span>]</span>
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>countries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <pre><code>0             Algeria
 1              Angola
 2               Benin
@@ -952,7 +989,7 @@ Name: country, Length: 142, dtype: object</code></pre>
 <li>Updating new Series row-by-row</li>
 </ol>
 <p>We’ll time each option as we go to see which is quickest. Let’s also make our Series really big, so we <em>feel</em> it.</p>
-<div id="5f6fddb9" class="cell" data-execution_count="18">
+<div id="072b8c54" class="cell" data-execution_count="18">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extend the country series</span></span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>extended_country <span class="op">=</span> pd.concat([df[<span class="st">"country"</span>]] <span class="op">*</span> <span class="dv">100</span>)</span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -960,7 +997,7 @@ Name: country, Length: 142, dtype: object</code></pre>
 <span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> pd.DataFrame({<span class="st">"name"</span>: extended_country, <span class="st">"length"</span>: pd.Series()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To time things, we’ll need to use the built-in <code>time</code> module. Let’s create our own timer with a basic <code>Timer</code> class.</p>
-<div id="5b99d204" class="cell" data-execution_count="19">
+<div id="0f3c1c0a" class="cell" data-execution_count="19">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> time <span class="im">import</span> time</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Timer:</span>
@@ -977,33 +1014,33 @@ Name: country, Length: 142, dtype: object</code></pre>
 </div>
 <section id="option-1-vectorisation" class="level4">
 <h4 class="anchored" data-anchor-id="option-1-vectorisation">Option 1: Vectorisation</h4>
-<div id="93d38313" class="cell" data-execution_count="20">
+<div id="9f410799" class="cell" data-execution_count="20">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> countries[<span class="st">"name"</span>].<span class="bu">str</span>.<span class="bu">len</span>()</span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.0025 s</code></pre>
+<pre><code>0.0034 s</code></pre>
 </div>
 </div>
 </section>
 <section id="option-2-using-apply" class="level4">
 <h4 class="anchored" data-anchor-id="option-2-using-apply">Option 2: Using <code>apply</code></h4>
-<div id="09074964" class="cell" data-execution_count="21">
+<div id="026f6f48" class="cell" data-execution_count="21">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> countries[<span class="st">"name"</span>].<span class="bu">apply</span>(<span class="bu">len</span>)</span>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.002 s</code></pre>
+<pre><code>0.0019 s</code></pre>
 </div>
 </div>
 </section>
 <section id="option-3-list-comprehensions" class="level4">
 <h4 class="anchored" data-anchor-id="option-3-list-comprehensions">Option 3: List comprehensions</h4>
-<div id="06c6124c" class="cell" data-execution_count="22">
+<div id="c740502f" class="cell" data-execution_count="22">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> [<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> countries[<span class="st">"name"</span>]]</span>
@@ -1016,7 +1053,7 @@ Name: country, Length: 142, dtype: object</code></pre>
 </section>
 <section id="option-4.-looping-over-the-rows" class="level4">
 <h4 class="anchored" data-anchor-id="option-4.-looping-over-the-rows">Option 4. Looping over the rows</h4>
-<div id="b0924ce6" class="cell" data-execution_count="23">
+<div id="f760cd34" class="cell" data-execution_count="23">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>lengths <span class="op">=</span> []</span>
@@ -1028,13 +1065,13 @@ Name: country, Length: 142, dtype: object</code></pre>
 <span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.2693 s</code></pre>
+<pre><code>0.2279 s</code></pre>
 </div>
 </div>
 </section>
 <section id="option-5.-updating-with-.loc" class="level4">
 <h4 class="anchored" data-anchor-id="option-5.-updating-with-.loc">Option 5. Updating with <code>.loc</code></h4>
-<div id="d4004a07" class="cell" data-execution_count="24">
+<div id="2cf45629" class="cell" data-execution_count="24">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
 <span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, country <span class="kw">in</span> <span class="bu">enumerate</span>(countries[<span class="st">"name"</span>]):</span>
@@ -1042,7 +1079,7 @@ Name: country, Length: 142, dtype: object</code></pre>
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>6.3482 s</code></pre>
+<pre><code>5.7988 s</code></pre>
 </div>
 </div>
 <p>So what can we conclude?</p>
@@ -1082,12 +1119,13 @@ Name: country, Length: 142, dtype: object</code></pre>
 <span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
+
+
 </section>
 </section>
 </section>
 
-</main>
-<!-- /main column -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
