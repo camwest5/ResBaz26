@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>python_bts</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="python_bts_files/libs/clipboard/clipboard.min.js"></script>
+<script src="python_bts_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="python_bts_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="python_bts_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="python_bts_files/libs/quarto-html/popper.min.js"></script>
+<script src="python_bts_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="python_bts_files/libs/quarto-html/anchor.min.js"></script>
+<link href="python_bts_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="python_bts_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="python_bts_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="python_bts_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="python_bts_files/libs/bootstrap/bootstrap-11d4f8990290ac9a721d15dc9257e5db.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Python behind-the-scenes: what data scientists should know</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>The goal of this session is touch on the important programming concepts that often get missed in research-oriented tutorials (e.g.&nbsp;the software carpentries).</p>
+<p>Part of the problem is that it takes a lot less Python to <em>use</em> the popular modules (e.g.&nbsp;<code>pandas</code>, <code>numpy</code>, <code>matplotlib</code>) than to <em>develop</em> them. This is <em>the whole point</em>: the modules exist so that you don’t need to be a developer.</p>
+<p>However, when it comes to using them, the more you know about what’s going on behind-the-scenes, the more you’ll understand <em>why things break</em> and <em>why things work</em>. This is a skill you learn over time, but one that we’ll hopefully build up a bit today.</p>
+<p>Important concepts for researchers include</p>
+<ul>
+<li>Classes/Object-Oriented-Programming (OOP)/Custom Variables: What is a <code>DataFrame</code>? What is a <code>Figure</code> or <code>Axes</code> object? What’s the difference between a function and a method?</li>
+<li>Vectorisation -&gt; why pandas dataframes are more efficient than lists (spoiler: it’s actually because of <code>numpy</code>)</li>
+<li>Module design. Why do some modules use submodules?</li>
+</ul>
+<section id="what-is-python" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-python">What is Python?</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is Python?</p>
+</div>
+</div>
+<p>The answer is not as obvious as you might think. There are three things you might call Python:</p>
+<ul>
+<li>The language</li>
+<li>The program</li>
+<li>The interpreter / IDE</li>
+</ul>
+<p>It’s best seen by example. Let’s run a simple program,</p>
+<div id="4f95a346" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"This is a simple program."</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>one_plus_one <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"1 + 1 ="</span>, one_plus_one)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">==</span> <span class="dv">2</span>:</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"All tests passed."</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>:</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Uh oh..."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>This is a simple program.
+1 + 1 = 2
+All tests passed.</code></pre>
+</div>
+</div>
+<p>What actually <em>happens</em> when you run it?</p>
+<ol type="1">
+<li>You (or your IDE) calls the program <code>python</code> with the input file <code>simple_program.py</code>.</li>
+</ol>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="">Windows</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">MacOS / Linux</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> simple_program.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> simple_program.py</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</div>
+<ol start="2" type="1">
+<li>The program <code>python</code> <em>interprets</em> your ‘Python’ code for the computer, converting it into binary commands (1000101010…). It then <em>interprets</em> the binary output as something meaningful. This is why <code>python</code> is called the <strong>interpreter</strong>.</li>
+</ol>
+<p>So far so good. But how does the interpreter know what to do? Is the interpreter written in Python too?</p>
+<p><strong><em>No.</em></strong></p>
+<p>For most people, their interpreter is written in <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> and referred to as the <a href="https://en.wikipedia.org/wiki/CPython">CPython</a> implementation. C is a <em>compiled</em> language, rather than an interpreted one. Before you run any C program, you must compile it into binary code <em>as a separate step</em>. This means it’s not dynamic but is suitable for programs.</p>
+<p>All this is to say that Python can mean a few things. Here, I’ll stick to “Python” for the language and <code>python</code> for the program.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Find your Python interpreter / executable.</p>
+<ul>
+<li>On Windows, this is <code>python3.exe</code></li>
+<li>On Mac / Linux, this is <code>python</code></li>
+</ul>
+<p>Some places to look</p>
+<ul>
+<li>Miniconda installs it in a folder called <code>miniforge3</code>.
+<ul>
+<li>On Windows, try <code>C:\Users\your_username\AppData\Local\miniforge3</code>. You’ll need to <strong>unhide hidden folders</strong>.</li>
+<li>On Mac / Linux, try <code>/home/your_username/miniforge3/bin</code></li>
+</ul></li>
+<li>Standalone Python installs it in <code>.../Python/bin</code></li>
+</ul>
+<p>If you used Miniconda, go to the <code>envs</code> folder in <code>miniforge3</code>. You might find <em>another</em> interpreter! It’s common to have many interpreters installed. Environment management can help mitigate side effects.</p>
+</div>
+</div>
+<p>So, <strong>what is Python</strong>?</p>
+<p>The Wikipedia answer is</p>
+<blockquote class="blockquote">
+<p>Python is a high-level, general-purpose programming language that emphasizes code readability, simplicity, and ease-of-writing with the use of significant indentation, “plain English” naming, an extensive (“batteries-included”) standard library, and garbage collection. Python supports multiple programming paradigms but with an emphasis on object-oriented programming and dynamic typing. Source: <a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Wikipedia</a></p>
+</blockquote>
+<p>Let’s unpack this.</p>
+<!-- | Characteristic | Description | 
+| --- | --- | 
+| **High-level** | Relies on another language (e.g. C) to convert to binary. | 
+| **General-purpose** | Used for software, research, data, machine learning, gaming, etc. | 
+| **Code readability** etc. | Lots of whitespace, simple syntax, code reads what it does | 
+| **Standard library** | There's a lot of useful built-in libraries | 
+| **Garbage collection** | Automatic memory management | 
+| **Object-oriented programming** | Custom variables/objects with built-in values and functions; **classes**. We'll talk more about this... |
+| **Dynamic typing** | You don't have to specify or stick to variable types (`int`, `str` etc.) |
+
+The most important one for us is **object-oriented programming**. It's an ... -->
+</section>
+<section id="unpacking-a-simple-example" class="level2">
+<h2 class="anchored" data-anchor-id="unpacking-a-simple-example">Unpacking a simple example</h2>
+<p>In our Python workshops we’ve been working with pandas DataFrames to manage data. We typically do something like</p>
+<div id="37900bea" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/gapminder_all.csv"</span>) </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>df.head() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">continent</th>
+<th data-quarto-table-cell-role="th">country</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1952</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1957</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1962</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1967</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1972</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1977</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1982</th>
+<th data-quarto-table-cell-role="th">gdpPercap_1987</th>
+<th data-quarto-table-cell-role="th">...</th>
+<th data-quarto-table-cell-role="th">pop_1962</th>
+<th data-quarto-table-cell-role="th">pop_1967</th>
+<th data-quarto-table-cell-role="th">pop_1972</th>
+<th data-quarto-table-cell-role="th">pop_1977</th>
+<th data-quarto-table-cell-role="th">pop_1982</th>
+<th data-quarto-table-cell-role="th">pop_1987</th>
+<th data-quarto-table-cell-role="th">pop_1992</th>
+<th data-quarto-table-cell-role="th">pop_1997</th>
+<th data-quarto-table-cell-role="th">pop_2002</th>
+<th data-quarto-table-cell-role="th">pop_2007</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>Africa</td>
+<td>Algeria</td>
+<td>2449.008185</td>
+<td>3013.976023</td>
+<td>2550.816880</td>
+<td>3246.991771</td>
+<td>4182.663766</td>
+<td>4910.416756</td>
+<td>5745.160213</td>
+<td>5681.358539</td>
+<td>...</td>
+<td>11000948.0</td>
+<td>12760499.0</td>
+<td>14760787.0</td>
+<td>17152804.0</td>
+<td>20033753.0</td>
+<td>23254956.0</td>
+<td>26298373.0</td>
+<td>29072015.0</td>
+<td>31287142</td>
+<td>33333216</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>Africa</td>
+<td>Angola</td>
+<td>3520.610273</td>
+<td>3827.940465</td>
+<td>4269.276742</td>
+<td>5522.776375</td>
+<td>5473.288005</td>
+<td>3008.647355</td>
+<td>2756.953672</td>
+<td>2430.208311</td>
+<td>...</td>
+<td>4826015.0</td>
+<td>5247469.0</td>
+<td>5894858.0</td>
+<td>6162675.0</td>
+<td>7016384.0</td>
+<td>7874230.0</td>
+<td>8735988.0</td>
+<td>9875024.0</td>
+<td>10866106</td>
+<td>12420476</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>Africa</td>
+<td>Benin</td>
+<td>1062.752200</td>
+<td>959.601080</td>
+<td>949.499064</td>
+<td>1035.831411</td>
+<td>1085.796879</td>
+<td>1029.161251</td>
+<td>1277.897616</td>
+<td>1225.856010</td>
+<td>...</td>
+<td>2151895.0</td>
+<td>2427334.0</td>
+<td>2761407.0</td>
+<td>3168267.0</td>
+<td>3641603.0</td>
+<td>4243788.0</td>
+<td>4981671.0</td>
+<td>6066080.0</td>
+<td>7026113</td>
+<td>8078314</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>Africa</td>
+<td>Botswana</td>
+<td>851.241141</td>
+<td>918.232535</td>
+<td>983.653976</td>
+<td>1214.709294</td>
+<td>2263.611114</td>
+<td>3214.857818</td>
+<td>4551.142150</td>
+<td>6205.883850</td>
+<td>...</td>
+<td>512764.0</td>
+<td>553541.0</td>
+<td>619351.0</td>
+<td>781472.0</td>
+<td>970347.0</td>
+<td>1151184.0</td>
+<td>1342614.0</td>
+<td>1536536.0</td>
+<td>1630347</td>
+<td>1639131</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>Africa</td>
+<td>Burkina Faso</td>
+<td>543.255241</td>
+<td>617.183465</td>
+<td>722.512021</td>
+<td>794.826560</td>
+<td>854.735976</td>
+<td>743.387037</td>
+<td>807.198586</td>
+<td>912.063142</td>
+<td>...</td>
+<td>4919632.0</td>
+<td>5127935.0</td>
+<td>5433886.0</td>
+<td>5889574.0</td>
+<td>6634596.0</td>
+<td>7586551.0</td>
+<td>8878303.0</td>
+<td>10352843.0</td>
+<td>12251209</td>
+<td>14326203</td>
+</tr>
+</tbody>
+</table>
+
+<p>5 rows × 38 columns</p>
+</div>
+</div>
+</div>
+<p>We’re going to study this example closely.</p>
+<section id="import-pandas-as-pd" class="level3">
+<h3 class="anchored" data-anchor-id="import-pandas-as-pd"><code>import pandas as pd</code></h3>
+<p>In the first line, we import the module. Behind-the-scenes, Python searches certain (somewhat mysterious) locations on your computer for a folder called <code>pandas</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Find the pandas module and open the <code>__init__.py</code> file.</p>
+<ol type="1">
+<li>Go to the location of your Python installation
+<ul>
+<li>If you’re using an environment, go there</li>
+</ul></li>
+<li>Find a folder called <code>pkgs</code> or <code>lib</code></li>
+<li>Dig a little for <code>pandas</code> (or something similar)</li>
+<li>Keep digging until you find <code>__init__.py</code></li>
+<li>Open it</li>
+</ol>
+</div>
+</div>
+<p>The <code>__init__.py</code> file gets run when you <code>import</code> the module. It’s usually full of other <code>import</code> statements to access the rest of the module and function/class definitions. We’ll come back to this.</p>
+</section>
+<section id="df-pd.read_csvdatagapminder.csv" class="level3">
+<h3 class="anchored" data-anchor-id="df-pd.read_csvdatagapminder.csv"><code>df = pd.read_csv("data/gapminder.csv")</code></h3>
+<p>This is the simplest line.</p>
+<ul>
+<li><code>df =</code> assigns the output of the right hand side to the variable <code>df</code>.</li>
+<li><code>pd.read_csv(...)</code> is a function <em>inside</em> the <code>pandas</code> module. The <code>.</code> means “look inside”</li>
+</ul>
+<p><code>pd.read_csv()</code> is a complicated function, but we can see its definition(s) explicitly—they’re in the module. Go to <code>pandas/io/parsers/readers.py</code> and search for <code>def read_csv()</code>. That’s the code that runs.</p>
+</section>
+<section id="df.head" class="level3">
+<h3 class="anchored" data-anchor-id="df.head"><code>df.head()</code></h3>
+<p>The <em>last</em> line, <code>df.head()</code> prints the first five rows in the dataframe <code>df</code>. There are three distinct elements:</p>
+<ul>
+<li><code>df</code> – the dataframe</li>
+<li><code>.</code> – the dot operator</li>
+<li><code>head()</code> – the function</li>
+</ul>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What’s the difference between</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>head(df)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pd.head(df)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+<p>The main difference is where <code>head</code> lives.</p>
+<ul>
+<li><code>head(df)</code> assumes that <code>head</code> lives in the global namespace. This happens when
+<ul>
+<li>It’s a built-in function</li>
+<li>You define it yourself</li>
+<li>You import it explicitly: <code>from some_module import head</code> (or <code>from some_module import headache as head</code>)</li>
+</ul></li>
+<li><code>pd.head(df)</code> assumes that <code>head</code> lives in the <code>pandas</code> module, like <code>read_csv</code>.</li>
+<li><code>df.head()</code> assumes that <code>head lives *inside the variable*</code>df`.</li>
+</ul>
+<p>How can a function live <em>inside</em> a variable? Object-oriented programming.</p>
+</section>
+</section>
+<section id="what-is-a-dataframe" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-dataframe">What is a dataframe?</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>What is a <code>pandas</code> DataFrame?</p>
+</div>
+</div>
+<p>According to <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas</a></p>
+<blockquote class="blockquote">
+<p>Two-dimensional, size-mutable, potentially heterogeneous tabular data.</p>
+</blockquote>
+<p>In other words, a spreadsheet.</p>
+<p>That answer might satisfy the data scientist but won’t satisfy the computer scientist. One could instead answer</p>
+<blockquote class="blockquote">
+<p>A Python container of Series objects</p>
+</blockquote>
+<p>We would need to define the Series too:</p>
+<blockquote class="blockquote">
+<p>A Python array of single-type (homogenous) data</p>
+</blockquote>
+<p>where by <em>array</em> we mean 1D container (like a list).</p>
+<p>This still doesn’t really answer the question. What <em>is</em> it? Is it a list? A dictionary?</p>
+<p>No, and no. It’s a custom-made variable type, which <em>uses</em> lists but <em>is not</em> a list. The <code>pandas</code> developers have taken the nuts and bolts of Python to design their own variable.</p>
+<p>However, there’s an important ingredient which let’s them do this <em>that we have not learnt yet</em>: the <code>class</code>. In essence, a <code>pandas</code> DataFrame is a <code>class</code>.</p>
+<section id="classes" class="level3">
+<h3 class="anchored" data-anchor-id="classes">Classes</h3>
+<p>In the Wikipedia definition before, we saw that</p>
+<blockquote class="blockquote">
+<p>… Python supports multiple programming paradigms but with an emphasis on object-oriented programming and dynamic typing.</p>
+</blockquote>
+<p>Classes enable object-oriented programming.</p>
+<ul>
+<li>A class is a general ‘template’, ‘blueprint’ or ‘framework’ for an object.</li>
+<li>All Python objects are particular <em>instances</em> of general <em>classes</em>.</li>
+<li>All instances of a class have the same features in common</li>
+</ul>
+<p>The following image<sup><a href="https://en.wikipedia.org/wiki/Object-oriented_programming#/media/File:Oop-uml-class-example.svg">source</a></sup>, is a schematic example of a class</p>
+<p><img src="img/oop.png" class="img-fluid"></p>
+<p>This class, <code>Button</code>, has six variables (static) and four functions (dynamic). All instances of <code>Button</code> (e.g.&nbsp;<code>red_button</code>, <code>blue_button</code>) will have an <code>xposition</code> and a function <code>draw()</code>, but the actual values may differ. It’s Platonic programming.</p>
+<p>Let’s code up the button class in Python. We won’t go over all the details, <a href="https://docs.python.org/3/tutorial/classes.html">The Python Tutorial</a> is excellent (but concise).</p>
+<p>Classes are a bit like function definitions.</p>
+<ul>
+<li><code>class Name:</code> indicates the class definition is beginning for the class <code>Name</code>. Classes in Python are usually <code>CapWords</code>.</li>
+<li>Variables defined immediately are <em>global</em> to the class - all instances have them. Here, all buttons have <code>ysize=3</code>.</li>
+<li><code>def __init__(...)</code> is run when you initialise an instance</li>
+<li><code>self</code> refers to ‘the current instance’ - whatever you name it.</li>
+<li>In the definitions, functions must take in <code>self</code> as the first argument. When used, <code>self</code> is left out.</li>
+</ul>
+<div id="8b864143" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Button:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    ysize <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, xpos, ypos, label<span class="op">=</span><span class="st">""</span>, listeners<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xsize <span class="op">=</span> <span class="bu">len</span>(label) <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xposition <span class="op">=</span> xpos</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.yposition <span class="op">=</span> ypos</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.label_text <span class="op">=</span> label</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.inerested_listeners <span class="op">=</span> listeners</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> draw(<span class="va">self</span>):</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="va">self</span>.xsize)</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"|"</span>, <span class="va">self</span>.label_text, <span class="st">"|"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"-"</span> <span class="op">*</span> <span class="va">self</span>.xsize)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> press(<span class="va">self</span>):</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"beep"</span>)</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> register_callback(<span class="va">self</span>):</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Press button later..."</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.press</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> unregister_callback(<span class="va">self</span>):</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Everything defined within the class lives inside the instances. To make it,</p>
+<div id="5463f39b" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>my_button <span class="op">=</span> Button(<span class="dv">0</span>, <span class="dv">0</span>, <span class="st">"STOP"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can view the variables <em>inside</em> <code>my_button</code>:</p>
+<div id="7b449747" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>my_button.xsize</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>8</code></pre>
+</div>
+</div>
+<div id="29c0d566" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_button.ysize)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3</code></pre>
+</div>
+</div>
+<div id="4c24d985" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(my_button.label_text)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>STOP</code></pre>
+</div>
+</div>
+<p>We can run the functions</p>
+<div id="e6edea12" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>my_button.draw()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------
+| STOP |
+--------</code></pre>
+</div>
+</div>
+<div id="f6515d80" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>my_button.press()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>beep</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Methods and attributes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Functions and variables that live <em>inside</em> a class/object are called <strong>methods</strong> and <strong>attributes</strong>.</p>
+<ul>
+<li>An <strong>attribute</strong> is a variable common to all instances of a class (e.g.&nbsp;<code>xsize</code>)</li>
+<li>A <strong>method</strong> is a function common to all instances of a class (e.g.&nbsp;<code>draw()</code>)</li>
+</ul>
+</div>
+</div>
+<p>We can have multiple buttons</p>
+<div id="40297a9e" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>blue_button <span class="op">=</span> Button(<span class="dv">4</span>, <span class="dv">4</span>, <span class="st">"BLUE"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>red_button <span class="op">=</span> Button(<span class="op">-</span><span class="dv">4</span>, <span class="op">-</span><span class="dv">4</span>, <span class="st">"RED"</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>blue_button.draw()</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>red_button.draw()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>--------
+| BLUE |
+--------
+-------
+| RED |
+-------</code></pre>
+</div>
+</div>
+<p>Finally, Python recognises that this is a new variable type:</p>
+<div id="288ba106" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(blue_button)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="35">
+<pre><code>__main__.Button</code></pre>
+</div>
+</div>
+<p>Returning to pandas, this is all that a DataFrame is. A big, fancy class.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Find where the <code>pandas</code> DataFrame class is defined.</p>
+<p>Hint: run <code>type(pd.DataFrame())</code> to see where it’s defined…</p>
+</div>
+</div>
+</section>
+</section>
+<section id="practical-tips" class="level2">
+<h2 class="anchored" data-anchor-id="practical-tips">Practical tips</h2>
+<p>From here, let’s move to some practical tips given all this background.</p>
+<section id="object-oriented-programming" class="level3">
+<h3 class="anchored" data-anchor-id="object-oriented-programming">Object-oriented programming</h3>
+<p>Classes can change the way you program by making changes <strong>in place</strong>. This is, practically, what object-oriented programming often looks like. Instead of running <em>external</em> functions to make changes to your variables, you run <em>internal</em> ones.</p>
+<p>Let’s look at an example using built-in Python code. We’ll start by making a list:</p>
+<div id="4e4b26bf" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fruits <span class="op">=</span> [<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Remember, <code>fruits</code> is an instance of the <code>list</code> class. (<code>list</code> should really be <code>List</code>, but for historical reasons, it’s not).</p>
+<p>Many list methods are in-place, meaning they <em>don’t</em> return their object, but <em>do</em> modify it behind-the-scenes.</p>
+<div id="863bdd08" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>append_output <span class="op">=</span> fruits.append(<span class="st">"durian"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(append_output)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['apple', 'banana', 'cherry', 'durian']
+None</code></pre>
+</div>
+</div>
+<p>This means that you could have lots of lines of code <em>without</em> an assignment operator <code>=</code> that <em>do</em> modify variables:</p>
+<div id="1bc692a0" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fruits.append(<span class="st">"banana"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fruits.remove(<span class="st">"cherry"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>fruits.reverse()</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits.index(<span class="st">"apple"</span>))</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3
+['banana', 'durian', 'banana', 'apple']</code></pre>
+</div>
+</div>
+<p>It’s a different style, and you don’t have to do it, but you should know that it can be done and that other people do!</p>
+</section>
+<section id="documentation" class="level3">
+<h3 class="anchored" data-anchor-id="documentation">Documentation</h3>
+<p>The best way to use a package is to consult its documentation. However, documentation is often written as a reference, not a tutorial. It’s important to have a good grasp of how documentation works.</p>
+<p>Take a look at the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/index.html"><code>pandas</code> API</a>. It’s structured for convenience. In the <strong>DataFrame</strong> section you’ll see an overview of everything defined <em>inside</em> <code>class DataFrame(...</code>:</p>
+<p>Let’s look at a rather complicated method, <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.apply.html"><code>pandas.DataFrame.apply</code></a>, and unpack the documentation.</p>
+<section id="the-title" class="level4">
+<h4 class="anchored" data-anchor-id="the-title">The title</h4>
+<p><img src="img/title.png" class="img-fluid"></p>
+<p>The title, <code>pandas.DataFrame.apply</code>, tells us that <code>apply</code> lives <em>inside</em> a <code>DataFrame</code> object, which is a class (we can assume based on CapWords) defined in the <code>pandas</code> module.</p>
+<p>This means that <code>apply</code> is a method or attribute of all <code>DataFrame</code> objects.</p>
+</section>
+<section id="the-signature" class="level4">
+<h4 class="anchored" data-anchor-id="the-signature">The signature</h4>
+<p><img src="img/signature.png" class="img-fluid"></p>
+<p>The signature tells us a few things.</p>
+<ul>
+<li><code>apply</code> is a method, not an attribute, because the parentheses <code>apply(...)</code> indicate that it is <em>callable</em> - i.e., a function. Later down we also see that it has a <strong>return</strong> section (which only functions have).</li>
+<li>The parameters/arguments we can send in:
+<ul>
+<li><em><code>func</code></em> has no default value, so we <strong>must provide it</strong>.</li>
+<li>The rest have defaults (e.g.&nbsp;<em><code>axis=0</code></em>), so they are optional.</li>
+<li><code>**kwargs</code> captures keyword arguments that are provided but aren’t in the signature.</li>
+</ul></li>
+</ul>
+<p>In a succinct way, we have almost all teh information we need to use <code>apply</code>.</p>
+</section>
+<section id="the-description" class="level4">
+<h4 class="anchored" data-anchor-id="the-description">The description</h4>
+<blockquote class="blockquote">
+<p>Apply a function along an axis of the DataFrame.</p>
+<p>Objects passed to the function are Series objects whose index is either the DataFrame’s index (<code>axis=0</code>) or the DataFrame’s columns (<code>axis=1</code>). By default (<code>result_type=None</code>), the final return type is inferred from the return type of the applied function. Otherwise, it depends on the result_type argument. The return type of the applied function is inferred based on the first computed result obtained after applying the function to a Series object.</p>
+</blockquote>
+<p>The description gives us plain-language explanations of the function’s behaviour. Usually things to look out for, general and special behaviour, and other important information is contained here. Typically, the description refers to parameters which are more systematically outlined lower down</p>
+</section>
+<section id="the-parameters" class="level4">
+<h4 class="anchored" data-anchor-id="the-parameters">The parameters</h4>
+<p><img src="img/params_top.png" class="img-fluid"></p>
+<p>…various other parameters…</p>
+<p><img src="img/params_bot.png" class="img-fluid"></p>
+<p>The parameter list gives a detailed account of each parameter, included the expected input types and default values.</p>
+<p>For example, we see that</p>
+<ul>
+<li><strong>func</strong> must be a <em>function</em></li>
+<li><strong>axis</strong> must be (<code>0</code> or <code>'index'</code>) or (<code>1</code> or <code>'columns'), defaulting to</code>0`</li>
+<li><strong>raw</strong> must be a <code>bool</code> type (<code>True</code> or <code>False</code>), defaulting to <code>False</code></li>
+<li>…</li>
+</ul>
+<p>The last description, <strong>kwargs</strong>, tells us that any additional keyword arguments (of the form <code>keyword=value</code>, e.g.&nbsp;<code>x=1</code>) will get passed to the function provided in <strong>func</strong>. This is a common procedure in high level modules and important to understand.</p>
+</section>
+<section id="the-return-values" class="level4">
+<h4 class="anchored" data-anchor-id="the-return-values">The return value(s)</h4>
+<p><img src="img/return.png" class="img-fluid"></p>
+<p>The <strong>returns</strong> section describes what the function outputs. We see that <code>apply</code> returns a <strong>Series</strong> or <strong>DataFrame</strong> which contains the result of applying <strong>func</strong> to the DataFrame.</p>
+</section>
+<section id="the-rest" class="level4">
+<h4 class="anchored" data-anchor-id="the-rest">The rest</h4>
+<p>The remainder of the documentation is supplementary. Usually some additional notes are provided, along with some useful examples.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group activity
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Go through the following objects and try to identify</p>
+<ol type="1">
+<li>Whether they’re a function, variable, method or attribute</li>
+<li>What they return</li>
+<li>What the required inputs/parameters/arguments are</li>
+<li>What happens to additional keyword arguments that aren’t in the list</li>
+</ol>
+<p>The objects are</p>
+<ul>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.columns.html"><code>pandas.DataFrame.columns</code></a></li>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.info.html"><code>pandas.DataFrame.info</code></a></li>
+<li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.loc.html#pandas.Series.loc">`pandas.Series.loc</a></li>
+<li><a href="https://docs.python.org/3.14/library/stdtypes.html#list.sort"><code>sort</code></a> (<strong>note</strong>: this is not in pandas)</li>
+<li><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.plot.html"><code>matplotlib.pyplot.plot</code></a></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="traceback" class="level3">
+<h3 class="anchored" data-anchor-id="traceback">Traceback</h3>
+<p>Having an understanding of this file structure makes handling errors easier. Let’s create a complicated error. This will also show us how <code>pandas</code> actually works.</p>
+<div id="f18d65ae" class="cell" data-execution_count="15">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame()</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Utterly meaningless code (apply attempts to apply a function across rows/cols)</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>df.<span class="bu">apply</span>(pd.DataFrame())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[39], line 4</span>
+<span class="ansi-green-fg ansi-bold">      1</span> df <span style="color:rgb(98,98,98)">=</span> pd<span style="color:rgb(98,98,98)">.</span>DataFrame()
+<span class="ansi-green-fg ansi-bold">      3</span> <span style="font-style:italic;color:rgb(95,135,135)"># Utterly meaningless code (apply attempts to apply a function across rows/cols)</span>
+<span class="ansi-green-fg">----&gt; 4</span> <span class="ansi-yellow-bg">df</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">apply</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">pd</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">DataFrame</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/frame.py:10401</span>, in <span class="ansi-cyan-fg">DataFrame.apply</span><span class="ansi-blue-fg">(self, func, axis, raw, result_type, args, by_row, engine, engine_kwargs, **kwargs)</span>
+<span class="ansi-green-fg ansi-bold">  10387</span> <span style="font-weight:bold;color:rgb(0,135,0)">from</span><span style="color:rgb(188,188,188)"> </span><span style="font-weight:bold;color:rgb(0,0,255)">pandas</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">core</span><span style="font-weight:bold;color:rgb(0,0,255)">.</span><span style="font-weight:bold;color:rgb(0,0,255)">apply</span><span style="color:rgb(188,188,188)"> </span><span style="font-weight:bold;color:rgb(0,135,0)">import</span> frame_apply
+<span class="ansi-green-fg ansi-bold">  10389</span> op <span style="color:rgb(98,98,98)">=</span> frame_apply(
+<span class="ansi-green-fg ansi-bold">  10390</span>     <span style="color:rgb(0,135,0)">self</span>,
+<span class="ansi-green-fg ansi-bold">  10391</span>     func<span style="color:rgb(98,98,98)">=</span>func,
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">  10399</span>     kwargs<span style="color:rgb(98,98,98)">=</span>kwargs,
+<span class="ansi-green-fg ansi-bold">  10400</span> )
+<span class="ansi-green-fg">&gt; 10401</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">op</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">apply</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span><span style="color:rgb(98,98,98)">.</span>__finalize__(<span style="color:rgb(0,135,0)">self</span>, method<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">apply</span><span style="color:rgb(175,0,0)">"</span>)
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py:873</span>, in <span class="ansi-cyan-fg">FrameApply.apply</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-fg ansi-bold">    869</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>engine <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">numba</span><span style="color:rgb(175,0,0)">"</span>:
+<span class="ansi-green-fg ansi-bold">    870</span>         <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">NotImplementedError</span>(
+<span class="ansi-green-fg ansi-bold">    871</span>             <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">the </span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">numba</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)"> engine doesn</span><span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">t support lists of callables yet</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    872</span>         )
+<span class="ansi-green-fg">--&gt; 873</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">apply_list_or_dict_like</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    875</span> <span style="font-style:italic;color:rgb(95,135,135)"># all empty</span>
+<span class="ansi-green-fg ansi-bold">    876</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>columns) <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">0</span> <span style="font-weight:bold;color:rgb(175,0,255)">and</span> <span style="color:rgb(0,135,0)">len</span>(<span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>index) <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">0</span>:
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py:628</span>, in <span class="ansi-cyan-fg">Apply.apply_list_or_dict_like</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-fg ansi-bold">    625</span> kwargs <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>kwargs
+<span class="ansi-green-fg ansi-bold">    627</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> is_dict_like(func):
+<span class="ansi-green-fg">--&gt; 628</span>     result <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">agg_or_apply_dict_like</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">op_name</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">apply</span><span style="color:rgb(175,0,0)" class="ansi-yellow-bg">"</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    629</span> <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">    630</span>     result <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>agg_or_apply_list_like(op_name<span style="color:rgb(98,98,98)">=</span><span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">apply</span><span style="color:rgb(175,0,0)">"</span>)
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py:766</span>, in <span class="ansi-cyan-fg">NDFrameApply.agg_or_apply_dict_like</span><span class="ansi-blue-fg">(self, op_name)</span>
+<span class="ansi-green-fg ansi-bold">    762</span> selection <span style="color:rgb(98,98,98)">=</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span>
+<span class="ansi-green-fg ansi-bold">    763</span> result_index, result_data <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>compute_dict_like(
+<span class="ansi-green-fg ansi-bold">    764</span>     op_name, obj, selection, kwargs
+<span class="ansi-green-fg ansi-bold">    765</span> )
+<span class="ansi-green-fg">--&gt; 766</span> result <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">wrap_results_dict_like</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">obj</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">result_index</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">result_data</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    767</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> result
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py:531</span>, in <span class="ansi-cyan-fg">Apply.wrap_results_dict_like</span><span class="ansi-blue-fg">(self, selected_obj, result_index, result_data)</span>
+<span class="ansi-green-fg ansi-bold">    528</span>         keys_to_use <span style="color:rgb(98,98,98)">=</span> ktu
+<span class="ansi-green-fg ansi-bold">    530</span>     axis: AxisInt <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">0</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">isinstance</span>(obj, ABCSeries) <span style="font-weight:bold;color:rgb(0,135,0)">else</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg">--&gt; 531</span>     result <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">concat</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    532</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">{</span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg">:</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">results</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">k</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">keys_to_use</span><span class="ansi-yellow-bg">}</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    533</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">axis</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    534</span> <span class="ansi-yellow-bg">        </span><span class="ansi-yellow-bg">keys</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">keys_to_use</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    535</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    536</span> <span style="font-weight:bold;color:rgb(0,135,0)">elif</span> <span style="color:rgb(0,135,0)">any</span>(is_ndframe):
+<span class="ansi-green-fg ansi-bold">    537</span>     <span style="font-style:italic;color:rgb(95,135,135)"># There is a mix of NDFrames and scalars</span>
+<span class="ansi-green-fg ansi-bold">    538</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(
+<span class="ansi-green-fg ansi-bold">    539</span>         <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">cannot perform both aggregation </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    540</span>         <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">and transformation operations </span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    541</span>         <span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">simultaneously</span><span style="color:rgb(175,0,0)">"</span>
+<span class="ansi-green-fg ansi-bold">    542</span>     )
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/reshape/concat.py:382</span>, in <span class="ansi-cyan-fg">concat</span><span class="ansi-blue-fg">(objs, axis, join, ignore_index, keys, levels, names, verify_integrity, sort, copy)</span>
+<span class="ansi-green-fg ansi-bold">    379</span> <span style="font-weight:bold;color:rgb(0,135,0)">elif</span> copy <span style="font-weight:bold;color:rgb(175,0,255)">and</span> using_copy_on_write():
+<span class="ansi-green-fg ansi-bold">    380</span>     copy <span style="color:rgb(98,98,98)">=</span> <span style="font-weight:bold;color:rgb(0,135,0)">False</span>
+<span class="ansi-green-fg">--&gt; 382</span> op <span style="color:rgb(98,98,98)">=</span> <span class="ansi-yellow-bg">_Concatenator</span><span class="ansi-yellow-bg">(</span>
+<span class="ansi-green-fg ansi-bold">    383</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">objs</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    384</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">axis</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">axis</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    385</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">ignore_index</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">ignore_index</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    386</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">join</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">join</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    387</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">keys</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">keys</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    388</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">levels</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">levels</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    389</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">names</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">names</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    390</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">verify_integrity</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">verify_integrity</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    391</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">copy</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">copy</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    392</span> <span class="ansi-yellow-bg">    </span><span class="ansi-yellow-bg">sort</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">sort</span><span class="ansi-yellow-bg">,</span>
+<span class="ansi-green-fg ansi-bold">    393</span> <span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    395</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> op<span style="color:rgb(98,98,98)">.</span>get_result()
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/reshape/concat.py:445</span>, in <span class="ansi-cyan-fg">_Concatenator.__init__</span><span class="ansi-blue-fg">(self, objs, axis, join, keys, levels, names, ignore_index, verify_integrity, copy, sort)</span>
+<span class="ansi-green-fg ansi-bold">    442</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>verify_integrity <span style="color:rgb(98,98,98)">=</span> verify_integrity
+<span class="ansi-green-fg ansi-bold">    443</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>copy <span style="color:rgb(98,98,98)">=</span> copy
+<span class="ansi-green-fg">--&gt; 445</span> objs, keys <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_clean_keys_and_objs</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">objs</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">keys</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    447</span> <span style="font-style:italic;color:rgb(95,135,135)"># figure out what our result ndim is going to be</span>
+<span class="ansi-green-fg ansi-bold">    448</span> ndims <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_get_ndims(objs)
+
+File <span class="ansi-green-fg">~/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/reshape/concat.py:507</span>, in <span class="ansi-cyan-fg">_Concatenator._clean_keys_and_objs</span><span class="ansi-blue-fg">(self, objs, keys)</span>
+<span class="ansi-green-fg ansi-bold">    504</span>     objs_list <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">list</span>(objs)
+<span class="ansi-green-fg ansi-bold">    506</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">len</span>(objs_list) <span style="color:rgb(98,98,98)">==</span> <span style="color:rgb(98,98,98)">0</span>:
+<span class="ansi-green-fg">--&gt; 507</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(<span style="color:rgb(175,0,0)">"</span><span style="color:rgb(175,0,0)">No objects to concatenate</span><span style="color:rgb(175,0,0)">"</span>)
+<span class="ansi-green-fg ansi-bold">    509</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> keys <span style="font-weight:bold;color:rgb(175,0,255)">is</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg ansi-bold">    510</span>     objs_list <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">list</span>(com<span style="color:rgb(98,98,98)">.</span>not_none(<span style="color:rgb(98,98,98)">*</span>objs_list))
+
+<span class="ansi-red-fg">ValueError</span>: No objects to concatenate</pre>
+</div>
+</div>
+</div>
+<p>This code is obviously broken, but the error message and traceback are unclear. They <em>should</em> read “cannot apply empty DataFrame to empty DataFrame” or something like that, but this case hasn’t received much attention.</p>
+<p>How would you read this traceback?</p>
+<ol type="1">
+<li>Read the message (bottom)</li>
+<li>Find <em>your</em> code (usually top)</li>
+<li>Follow it down</li>
+</ol>
+<p>Let’s work through it.</p>
+<pre><code>ValueError: No objects to concatenate</code></pre>
+<p>This is the error that was raised <em>at the bottom</em> of the Traceback (the line <code>raise ValueError("No objects to concatenate")</code>). Since we weren’t trying to concatenate, something deeper is the problem.</p>
+<pre><code>  File "/home/uqcwest5/ResBaz26/button.py", line 39, in &lt;module&gt;
+    df.apply(pd.DataFrame())</code></pre>
+<p>This is our broken line. If you can’t see the problem, then keep digging.</p>
+<pre><code>  File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/frame.py", line 10401, in apply
+    return op.apply().__finalize__(self, method="apply")</code></pre>
+<p>This is the file where <code>DataFrame.apply()</code> is defined. The error occurs in line 10401, with the function <code>__finalize__</code>, which lives in the <em>output</em> of the function <code>op.apply()</code> (whatever <code>op</code> is).</p>
+<pre><code>  File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py", line 628, in apply_list_or_dict_like
+    result = self.agg_or_apply_dict_like(op_name="apply")
+  File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py", line 766, in agg_or_apply_dict_like
+    result = self.wrap_results_dict_like(obj, result_index, result_data)
+  File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/apply.py", line 531, in wrap_results_dict_like
+    result = concat(</code></pre>
+<p>A series of function calls in the <code>apply.py</code> file. The last one calls the function <code>concat(...</code>, which is elsewhere (and the part that breaks)</p>
+<pre><code>File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/reshape/concat.py", line 382, in concat
+    op = _Concatenator(
+  File "/home/uqcwest5/ResBaz26/.venv/lib/python3.10/site-packages/pandas/core/reshape/concat.py", line 445, in __init__
+    objs, keys = self._clean_keys_and_objs(objs, keys)</code></pre>
+<p>A <code>_Concatenator(</code> <em>class</em> is instantiated via the <code>__init__</code> function in <code>concat.py</code>, line 445. In initialising the (non-public) object, the internal, attached function <code>_clean_keys_and_objs</code> raises the error.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Naming
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Object naming should be intentional in Python, and usually communicates different purposes for the variable. <a href="https://peps.python.org/pep-0008/">PEP8</a> has a comprehensive overview of style guidelines, here are a few:</p>
+<ul>
+<li><code>lowercase_with_underscores</code> for variables and functions</li>
+<li><code>UPPERCASE_WITH_UNDERSCORES</code> for (intended) constants</li>
+<li><code>CapWords</code> for classes</li>
+<li><code>_leading_underscore</code> for non-public functions</li>
+<li><code>__dunder__</code> for magic functions</li>
+<li><code>__dunder_leading</code> to avoid clashes</li>
+</ul>
+<p>In the <code>_Concatenator</code> example, this is a non-public class, intended for internal <code>pandas</code> use only and subject to change.</p>
+</div>
+</div>
+<p>If we were <code>pandas</code> developers, we could now go and fix the error in <code>concat.py</code>. However, since it’s <em>our</em> code that’s broken, we should solve that first.</p>
+</section>
+<section id="iteration" class="level3">
+<h3 class="anchored" data-anchor-id="iteration">Iteration</h3>
+<p>Given that, at the end of the day, <code>pandas</code> DataFrames are just made out of built-in Python objects (e.g.&nbsp;lists) anyway, is there any real advantage to using a DataFrame? Why not just a nested list, or dictionary:</p>
+<div id="b5b94beb" class="cell" data-execution_count="16">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> {<span class="st">"col1"</span>: [<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">5</span>], <span class="st">"col2"</span>: [<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>,<span class="dv">10</span>]}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>One of the advantages is efficiency: <code>pandas</code> has been designed to be efficient.</p>
+<p>A common task is doing the “same thing” to every row/column. Returning to the gapminder dataset, let’s isolate the “country” column (Series):</p>
+<div id="3e2cf112" class="cell" data-execution_count="17">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">"data/gapminder_all.csv"</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> df[<span class="st">"country"</span>]</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>countries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+<pre><code>0             Algeria
+1              Angola
+2               Benin
+3            Botswana
+4        Burkina Faso
+            ...      
+137       Switzerland
+138            Turkey
+139    United Kingdom
+140         Australia
+141       New Zealand
+Name: country, Length: 142, dtype: object</code></pre>
+</div>
+</div>
+<p>Our goal: <strong>Create a new Series where each row contains the length of each country (name)</strong>.</p>
+<p>We’ll do it via four different approaches:</p>
+<ol type="1">
+<li>Using vectorisation</li>
+<li>Using <code>apply</code></li>
+<li>Using built-in list comprehensions</li>
+<li>Looping over the rows</li>
+<li>Updating new Series row-by-row</li>
+</ol>
+<p>We’ll time each option as we go to see which is quickest. Let’s also make our Series really big, so we <em>feel</em> it.</p>
+<div id="5f6fddb9" class="cell" data-execution_count="18">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extend the country series</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>extended_country <span class="op">=</span> pd.concat([df[<span class="st">"country"</span>]] <span class="op">*</span> <span class="dv">100</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Create new dataframe</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> pd.DataFrame({<span class="st">"name"</span>: extended_country, <span class="st">"length"</span>: pd.Series()})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To time things, we’ll need to use the built-in <code>time</code> module. Let’s create our own timer with a basic <code>Timer</code> class.</p>
+<div id="5b99d204" class="cell" data-execution_count="19">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> time <span class="im">import</span> time</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Timer:</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> start(<span class="va">self</span>):</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.t0 <span class="op">=</span> time()</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> stop(<span class="va">self</span>):</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="bu">round</span>(time() <span class="op">-</span> <span class="va">self</span>.t0, <span class="dv">4</span>), <span class="st">"s"</span>)</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> Timer()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="option-1-vectorisation" class="level4">
+<h4 class="anchored" data-anchor-id="option-1-vectorisation">Option 1: Vectorisation</h4>
+<div id="93d38313" class="cell" data-execution_count="20">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> countries[<span class="st">"name"</span>].<span class="bu">str</span>.<span class="bu">len</span>()</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0025 s</code></pre>
+</div>
+</div>
+</section>
+<section id="option-2-using-apply" class="level4">
+<h4 class="anchored" data-anchor-id="option-2-using-apply">Option 2: Using <code>apply</code></h4>
+<div id="09074964" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> countries[<span class="st">"name"</span>].<span class="bu">apply</span>(<span class="bu">len</span>)</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.002 s</code></pre>
+</div>
+</div>
+</section>
+<section id="option-3-list-comprehensions" class="level4">
+<h4 class="anchored" data-anchor-id="option-3-list-comprehensions">Option 3: List comprehensions</h4>
+<div id="06c6124c" class="cell" data-execution_count="22">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> [<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> countries[<span class="st">"name"</span>]]</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0027 s</code></pre>
+</div>
+</div>
+</section>
+<section id="option-4.-looping-over-the-rows" class="level4">
+<h4 class="anchored" data-anchor-id="option-4.-looping-over-the-rows">Option 4. Looping over the rows</h4>
+<div id="b0924ce6" class="cell" data-execution_count="23">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>lengths <span class="op">=</span> []</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, row <span class="kw">in</span> countries.iterrows():</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    lengths.append(<span class="bu">len</span>(row[<span class="st">"name"</span>]))</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>countries[<span class="st">"length"</span>] <span class="op">=</span> lengths</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.2693 s</code></pre>
+</div>
+</div>
+</section>
+<section id="option-5.-updating-with-.loc" class="level4">
+<h4 class="anchored" data-anchor-id="option-5.-updating-with-.loc">Option 5. Updating with <code>.loc</code></h4>
+<div id="d4004a07" class="cell" data-execution_count="24">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>t.start()</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, country <span class="kw">in</span> <span class="bu">enumerate</span>(countries[<span class="st">"name"</span>]):</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    countries.loc[i, <span class="st">"length"</span>] <span class="op">=</span> <span class="bu">len</span>(country)</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>t.stop()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6.3482 s</code></pre>
+</div>
+</div>
+<p>So what can we conclude?</p>
+<ul>
+<li>Vectorisation, <code>.apply()</code> and built-in list comprehensions are just as quick as each other.
+<ul>
+<li>For complicated custom functions, unlike <code>len</code>, we’ll find that vectorisation is the quickest. It’s also the simplest</li>
+</ul></li>
+<li>Manually appending, especially using <code>.loc</code> is <strong>much slower</strong>.</li>
+</ul>
+<p>For large datasets, using dedicated <code>pandas</code> function is best.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Group activity: Docstrings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As a final activity, to round out some of the things we’ve done, let’s create some documentation ourselves.</p>
+<p>In the <code>Timer</code> function, provide concise documentation that describes the behaviour of</p>
+<ul>
+<li>The <code>Timer</code> class</li>
+<li>The <code>start</code> function</li>
+<li>The <code>stop</code> function</li>
+</ul>
+<p>You should provide the documentation in triple-quoted blocks directly below the class/function signatures, e.g.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Timer:</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""documentation begins here</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="co">    continues here</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="co">    and ends here</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>):</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>        ...</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
