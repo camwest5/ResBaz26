@@ -1,1 +1,224 @@
-#
+# Managing Python environments and installations: Bring your problems
+
+## Background
+
+Python is surprisingly difficult to set up, and even more difficult to get right.
+
+### Python installations
+
+A Python installation consists of 
+
+* A **python** executable (e.g. `python.exe`, `python3.exe`, `python3` etc.). This might be a reference to another file on your computer.
+* A collection of **built-in** modules
+
+When you install Python [from the official website](https://www.python.org/), this is all you get. Your only IDE is IDLE, and you're limited in terms of virtual environment management. That said, the built-in tools are often sufficient!
+
+However, when you install Python via a larger package manager (e.g. Anaconda, miniconda etc.), this process is a little less obvious. You might not be able to easily see where your Python installation is because it's bundled up with everything else.
+
+We'll take a look at identifying Python installations in the workshop time.
+
+### PATH
+
+Your operating system has an (inconveniently named) 'environment variable', also known as PATH. This is the list of locations where it looks for programs. When you install Python, you can either add it to PATH or not.
+
+This is a common issue - when you don't add it to PATH, your computer can struggle to run Python. When you **do** add it to PATH, you can create conflicts.
+
+> Anaconda recommends you **don't** add Python to PATH
+
+To check if you've got Python on PATH, try running the following in a terminal
+
+:::{.panel-tabset}
+
+# Windows
+
+```bash
+python
+```
+
+# MacOS / Linux
+
+```bash
+python3
+```
+
+:::
+
+If you *don't* have any Python installations recognised by your OS, you'll get an error like
+
+:::{.panel-tabset}
+
+
+# Command Prompt
+
+```bash
+'p' is not recognized as an internal or external command,
+operable program or batch file.
+```
+
+# Powershell
+
+```bash
+The term 'python' is not recognized as the name of a cmdlet, function, script file, or operable program. Check the
+spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ python
++ ~
+    + CategoryInfo          : ObjectNotFound: (python:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+```
+
+# Bash etc.
+
+```
+python3: command not found
+```
+
+:::
+
+If you know that you've got Python installed, then you *can* still run Python, but you'll need to navigate to the location of your installation in the terminal. This is cumbersome, and if you've got an Anaconda distribution, using an Anaconda prompt/environment will solve the issue for you.
+
+
+### Virtual environments
+
+Think of a virtual environment as a **standalone Python installation** that has been added to your PATH.
+
+> It's not because it's *virtual*.
+
+What does a typical Python environment consist of?
+
+* A *reference* to a **python** executable (e.g. `python.exe`, `python3.exe`, `python3` etc.).
+* A *reference* to **built-in** modules
+* A collection of **external** modules/packages
+
+Environments capture a specific Python version and collection of packages. When you run Python from an *activated* environment, you can only 'see' the packages in your environment.
+
+This lets you avoid dependency conflicts, maintain separate environments for separate projects and avoid clogging your global package list.
+
+:::{.callout-note}
+# Linux
+
+On Linux operating systems, using virtual environments is **mandatory**. This is because the OS itself depends on Python it comes with, so you could potentially break the OS by introducing packages with dependency conflicts!
+
+:::
+
+### `venv`
+
+Python comes with its own virtual environment manager called [`venv`](https://docs.python.org/3/library/venv.html). We'll look at using this, before discussing other options. It relies on using Python from the terminal. If you're having issues doing so, just hang tight for now...
+
+First, 
+
+1. Create a new folder on your computer for today's session (e.g. `env_example`)
+2. Copy the **absolute path** to this location
+
+In the terminal, this will be simplest if we move to the folder. Use the `cd` command to change directories, with `...` as the path to your new folder:
+
+```bash
+cd ...
+```
+Now we can reate a virtual environment there using `venv`. Technically, `venv` is a built-in Python module (like `math`). We can run modules directly from the command line using the `python -m` flag:
+
+:::{.panel-tabset}
+
+# Windows
+
+```bash
+python -m venv .venv
+```
+
+# MacOS / Linux
+
+```bash
+python3 -m venv .venv
+```
+
+:::
+
+
+You should see that you now have a new folder called `.venv`, with a fresh Python installation inside.
+
+Creating the environment is one thing, but running Python from it is another. Telling your terminal to look *inside the environment* before it looks on PATH involves **activating** it.
+
+To activate an environment, you'll need to run one of the "activate" scripts in `Scripts/` (Windows) or `bin/` (MacOS/Linux). First, let's move to the 
+
+:::{.panel-tabset}
+
+# Command prompt
+
+```bash
+.venv\Scripts\activate.bat
+```
+
+# Powershell
+
+```bash
+.venv\Scripts\Activate.ps1
+```
+
+# bash
+
+```bash
+source .venv/bin/activate
+```
+
+# fish/csh/pwsh
+
+```bash
+source .venv/bin/activate.*
+```
+
+where `*` is either
+
+* `fish`
+* `csh`
+* `ps1`
+
+:::
+
+You should see on the left of your terminal that the prompt now has `(.venv)`, telling you that you're in the environment. 
+
+To deactivate an active environment, simply run `deactivate`.
+
+### Running Python from the environment
+
+Once your environment is activated, running `python` will use the Python valid for the environment. Since we haven't installed any external packages, none will be recognised. Try running
+
+:::{.panel-tabset}
+
+# Windows
+
+```bash
+python
+```
+
+# MacOS / Linux
+
+```bash
+python3
+```
+
+:::
+
+and then 
+
+```bash
+>>> import pandas as pd
+```
+
+You should get an error! Luckily, `pip` comes with all `venv` environments, which we can use to install pandas. In your terminal,
+
+```bash
+pip install pandas
+python
+```
+
+Then 
+
+```bash
+>>> import pandas as pd
+```
+
+## Common issues
+
+## Problem solving
+
+Now it's time to solve your environment issues! Remember, a few things you need to in
